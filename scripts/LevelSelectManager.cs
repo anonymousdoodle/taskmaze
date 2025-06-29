@@ -31,6 +31,28 @@ public class LevelSelectManager : MonoBehaviour
         }
     }
 
+    public void RefreshButtons()
+    {
+        int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
+
+        for (int i = 0; i < levelButtons.Length; i++)
+        {
+            if (i < unlockedLevel)
+            {
+                levelButtons[i].interactable = true;
+                levelButtons[i].image.color = Color.white;
+            }
+            else
+            {
+                levelButtons[i].interactable = false;
+                Color c = levelButtons[i].image.color;
+                c.a = 0.5f;
+                levelButtons[i].image.color = c;
+            }
+        }
+    }
+
+
     public void LoadLevel(string levelName)
     {
         Time.timeScale = 1f;
