@@ -31,6 +31,8 @@ public class StartManager : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.DeleteKey("UnlockedLevel");
+
         PlayerPrefs.DeleteKey("ShowMenu");
         string currentLevel = SceneManager.GetActiveScene().name;
 
@@ -72,6 +74,8 @@ public class StartManager : MonoBehaviour
         }
     }
 
+    
+
     public void RedoLevel()
     {
         Time.timeScale = 1f;
@@ -79,13 +83,17 @@ public class StartManager : MonoBehaviour
         if (ScoreManager.instance != null)
         {
             ScoreManager.instance.ResetToLevelStartScore(); // resets to level start score/default score
-            
         }
 
         PlayerPrefs.SetInt("ShowMenu", 0);
 
+        menuCanvas.SetActive(false);
+        successCanvas.SetActive(false);
+        successPanel.SetActive(false);
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
 
 
     public void GoToMenu()
@@ -112,6 +120,7 @@ public class StartManager : MonoBehaviour
             PlayerPrefs.SetInt("ShowMenu", 0); 
         }
     }
+
 
 
     public void NextLevel()
@@ -195,9 +204,15 @@ public class StartManager : MonoBehaviour
         pauseCanvas.SetActive(false);
         pauseButtonCanvas.SetActive(false);
 
+       // for when the player finishes a level, goes to menu via success panel/window
+       // then goes to levels panel/window again to show the recently unlocked level
+        LevelSelectManager lsm = FindObjectOfType<LevelSelectManager>();
+        if (lsm != null) lsm.RefreshButtons();
+
         if (backButton != null)
             backButton.SetActive(showBackButton);
     }
+
 
 
 
